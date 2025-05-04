@@ -1,6 +1,0 @@
-name = "playchain-esport"
-compatibility_date = "2025-05-03"
-workers_dev = true
-
-[site]
-bucket = "./"
